@@ -38,13 +38,13 @@ namespace kopator
 
         private async void btCopy_Click(object sender, EventArgs e)
         {
-            var bError = false;
-
             try
             {
+                oTokenSource = oTokenSource ?? new CancellationTokenSource();
+
                 if (bProcessing)
                 {
-                    oTokenSource.Cancel();
+                    oTokenSource?.Cancel();
                     return;
                 }
 
@@ -52,14 +52,22 @@ namespace kopator
                 var sSourcePath = Path.GetFullPath(tbSource.Text);
                 var sDestinyPath = Path.GetFullPath(tbDestiny.Text);
 
-                // check
-                if (!CheckDirectory(sSourcePath, bMove))
+                // check for null/empty
+                if(string.IsNullOrEmpty(sSourcePath) || string.IsNullOrEmpty(sDestinyPath))
+                {
+                    MessageBox.Show("Bitte Ziel- und Quellordner angeben!");
+                    return;
+                }
+
+                // check source
+                if (!CheckDirectory(sSourcePath, true, bMove))
                 {
                     MessageBox.Show("Keine Lese- und/oder Schreibrechte für den Quellordner!");
                     return;
                 }
 
-                if (!CheckDirectory(sSourcePath, false))
+                // check destiny
+                if (!CheckDirectory(sDestinyPath, false, true))
                 {
                     MessageBox.Show("Keine Schreibrechte für den Zielordner!");
                     return;
@@ -80,9 +88,9 @@ namespace kopator
                 await Task.Run(() => DoProcessing(oProgress, bMove, sSourcePath, sDestinyPath, a_sFiles), oTokenSource.Token);
                 SetProcessInWork(false);
 
-                if (oTokenSource.IsCancellationRequested)
+                if (oTokenSource?.IsCancellationRequested ?? true)
                     MessageBox.Show("Kopiervorgang abgebrochen!");
-                else if (!bError)
+                else
                 {
                     MessageBox.Show("Kopiervorgang abgeschlossen!");
                     Close();
@@ -91,12 +99,11 @@ namespace kopator
             catch (Exception oException)
             {
                 MessageBox.Show(oException.ToString());
-                bError = true;
             }
             finally
             {
                 oProgressBar.ResetText();
-                oTokenSource.Dispose();
+                oTokenSource?.Dispose();
             }
         }
 
@@ -141,7 +148,7 @@ namespace kopator
 
         private string GetBtCopyText() => cbMove.Checked ? "Verschieben" : "Kopieren";
 
-        public bool CheckDirectory(string sDirPath, bool bWritable)
+        public bool CheckDirectory(string sDirPath, bool bReadable, bool bWritable)
         {
             try
             {
@@ -152,12 +159,11 @@ namespace kopator
                     }
                     return true;
                 }
-                else
-                {
+
+                if(bReadable)
                     Directory.GetFiles(sDirPath);
 
-                    return true;
-                }
+                return true;
             }
             catch
             {
@@ -171,7 +177,7 @@ namespace kopator
             {
                 try
                 {
-                    if (oTokenSource.IsCancellationRequested)
+                    if (oTokenSource?.IsCancellationRequested ?? true)
                         return;
 
                     var sNewPath = Path.Combine(sDestinyPath, Path.GetFileName(sFile));
@@ -188,7 +194,7 @@ namespace kopator
 
                     oProgress?.Report(true);
 
-                    if (oTokenSource.IsCancellationRequested)
+                    if (oTokenSource?.IsCancellationRequested ?? true)
                         return;
                 }
                 catch (Exception)

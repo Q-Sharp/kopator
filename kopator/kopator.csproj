@@ -12,6 +12,8 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -55,9 +57,9 @@
     <Compile Include="kopatorMainForm.Designer.cs">
       <DependentUpon>kopatorMainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="kopatorMode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs" />
     <EmbeddedResource Include="kopatorMainForm.resx">
       <DependentUpon>kopatorMainForm.cs</DependentUpon>
     </EmbeddedResource>

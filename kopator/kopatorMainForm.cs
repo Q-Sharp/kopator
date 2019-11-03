@@ -97,6 +97,10 @@ namespace kopator
                 return;
             }
 
+            // create directory if it is not existing
+            if (!Directory.Exists(sDestinyPath))
+                Directory.CreateDirectory(sDestinyPath);
+
             // check destiny
             if (!CheckDirectory(sDestinyPath, false, true))
             {
@@ -178,8 +182,8 @@ namespace kopator
         private void btClose_Click(object oSender, EventArgs oArgs) => Close();
         private void cbMove_CheckedChanged(object oSender, EventArgs oArgs) => btCopy.Text = GetBtCopyText();
 
-        private void btDestinyDotDotDot_Click(object oSender, EventArgs oArgs) => HandleFolderBrowser("Quelle auswählen.", false, tbSource);
-        private void btSourceDotDotDot_Click(object oSender, EventArgs oArgs) => HandleFolderBrowser("Ziel auswählen.", true, tbDestiny);
+        private void btDestinyDotDotDot_Click(object oSender, EventArgs oArgs) => HandleFolderBrowser("Quelle auswählen.", false, tbDestiny);
+        private void btSourceDotDotDot_Click(object oSender, EventArgs oArgs) => HandleFolderBrowser("Ziel auswählen.", true, tbSource);
         private void btCollectDotDotDot_Click(object oSender, EventArgs oArgs) => HandleFolderBrowser("Sammelziel auswählen.", false, tbCollect);
 
         private void HandleFolderBrowser(string sDescription, bool bShowNewFolderButton, TextBox oDestinyBox)

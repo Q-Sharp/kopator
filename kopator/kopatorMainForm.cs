@@ -1,4 +1,5 @@
 ﻿using kopator.Properties;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.IO;
 using System.Linq;
@@ -158,8 +159,8 @@ namespace kopator
 
             // get sub dirs
             var a_sDirs = Directory.GetDirectories(sPath);
-            var a_sFilesNotIncluded = tbIgnore.Text.Split(',').Select(t => Directory.GetFiles(sPath, t, SearchOption.AllDirectories)).SelectMany(s => s).ToArray();
-            var a_sAllFiles = Directory.GetFiles(sPath, "*", SearchOption.AllDirectories);
+            var a_sFilesNotIncluded = tbIgnore.Text.Split(',').Select(t => t.Trim(' ')).Select(t => Directory.GetFiles(sPath, t, System.IO.SearchOption.AllDirectories)).SelectMany(s => s).ToArray();
+            var a_sAllFiles = Directory.GetFiles(sPath, "*", System.IO.SearchOption.AllDirectories);
             var a_sFiles = a_sAllFiles.Except(a_sFilesNotIncluded).ToArray();
 
             // set progressbar
@@ -279,7 +280,7 @@ namespace kopator
 
             try
             {
-                Directory.Delete(sRoot, true);
+                FileSystem.DeleteFile(sRoot, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
             }
             catch (IOException)
             {

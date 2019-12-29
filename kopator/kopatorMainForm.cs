@@ -1,5 +1,4 @@
 ﻿using kopator.Properties;
-using Microsoft.VisualBasic.FileIO;
 using System;
 using System.IO;
 using System.Linq;
@@ -42,6 +41,8 @@ namespace kopator
             Settings.Default.Ignore = tbIgnore.Text;
             Settings.Default.TabPage = oTabControl.SelectedIndex;
             Settings.Default.Save();
+
+            oTokenSource?.Dispose();
         }
 
         private async void btCopy_Click(object oSender, EventArgs oArgs)
@@ -59,11 +60,11 @@ namespace kopator
                 switch(Mode)
                 {
                     case kopatorMode.Copy:
-                        await Copy();
+                        await Copy().ConfigureAwait(true);
                         break;
 
                     case kopatorMode.Collect:
-                        await Collect();
+                        await Collect().ConfigureAwait(true);
                         break;
                 }
             }
@@ -119,9 +120,9 @@ namespace kopator
             var a_sFiles = Directory.GetFiles(sSourcePath);
 
             // set progressbar
-            oProgressBar.Maximum = a_sFiles.Count();
+            oProgressBar.Maximum = a_sFiles.Length;
 
-            await Task.Run(() => DoProcessing(oProgress, bMove, sDestinyPath, a_sFiles), oTokenSource.Token);
+            await Task.Run(() => DoProcessing(oProgress, bMove, sDestinyPath, a_sFiles), oTokenSource.Token).ConfigureAwait(false);
             SetProcessInWork(false);
 
             if (oTokenSource?.IsCancellationRequested ?? true)
@@ -164,10 +165,10 @@ namespace kopator
             var a_sFiles = a_sAllFiles.Except(a_sFilesNotIncluded).ToArray();
 
             // set progressbar
-            oProgressBar.Maximum = a_sFiles.Count();
+            oProgressBar.Maximum = a_sFiles.Length;
 
-            await Task.Run(() => DoProcessing(oProgress, true, sPath, a_sFiles), oTokenSource.Token);
-            await Task.Run(() => a_sDirs.ToList().ForEach(d => DeleteDirectory(d)));
+            await Task.Run(() => DoProcessing(oProgress, true, sPath, a_sFiles), oTokenSource.Token).ConfigureAwait(true);
+            await Task.Run(() => a_sDirs.ToList().ForEach(d => DeleteDirectory(d))).ConfigureAwait(true);
             SetProcessInWork(false);
 
             if (oTokenSource?.IsCancellationRequested ?? true)
@@ -215,7 +216,7 @@ namespace kopator
 
         private string GetBtCopyText() => Mode == kopatorMode.Collect ? "Sammeln" : cbMove.Checked ? "Verschieben" : "Kopieren";
 
-        public bool CheckDirectory(string sDirPath, bool bReadable, bool bWritable)
+        public static bool CheckDirectory(string sDirPath, bool bReadable, bool bWritable)
         {
             try
             {
@@ -247,7 +248,11 @@ namespace kopator
                     if (oTokenSource?.IsCancellationRequested ?? true)
                         return;
 
+                    var sOldPath = Path.Combine(Path.GetDirectoryName(sFile), Path.GetFileName(sFile));
                     var sNewPath = Path.Combine(sDestinyPath, Path.GetFileName(sFile));
+
+                    if (sOldPath == sNewPath)
+                        continue;
 
                     if (bCut)
                     {
@@ -273,14 +278,12 @@ namespace kopator
 
         private void DeleteDirectory(string sRoot)
         {
-            foreach (string directory in Directory.GetDirectories(sRoot))
-            {
-                DeleteDirectory(directory);
-            }
+            foreach (var sDir in Directory.GetDirectories(sRoot))
+                DeleteDirectory(sDir);
 
             try
             {
-                FileSystem.DeleteFile(sRoot, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                Directory.Delete(sRoot, true);
             }
             catch (IOException)
             {
@@ -291,7 +294,6 @@ namespace kopator
                 Directory.Delete(sRoot, true);
             }
         }
-
 
         private void oTabControl_Selected(object ooSender, TabControlEventArgs oArgs)
         {

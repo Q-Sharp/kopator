@@ -3,15 +3,15 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace kopator
 {
     public partial class kopatorMainForm : Form
     {
-        private bool bProcessing;
-        private CancellationTokenSource oTokenSource = new CancellationTokenSource();
+        private IkopatorControl _currentControl => oTabControl?.SelectedTab?.Controls?.OfType<IkopatorControl>()?.FirstOrDefault();
+        public bool bProcessing { get; set; }
+        public CancellationTokenSource oTokenSource { get; set; } = new CancellationTokenSource();
 
         public kopatorMainForm() => InitializeComponent();
         public kopatorMode Mode { get; set; }
@@ -19,11 +19,8 @@ namespace kopator
         private void kopatorMainForm_Load(object oSender, EventArgs oArgs)
         {
             cbMove.Checked = Settings.Default.Cut;
-            tbSource.Text = Settings.Default.Source;
-            tbDestiny.Text = Settings.Default.Destiny;
-            tbCollect.Text = Settings.Default.Collect;
-            tbIgnore.Text = Settings.Default.Ignore;
             oTabControl.SelectTab(Settings.Default.TabPage);
+            SetTabPageControl(Settings.Default.TabPage);
         }
 
         private void kopatorMainForm_FormClosing(object oSender, FormClosingEventArgs oArgs)
@@ -35,21 +32,31 @@ namespace kopator
             }
 
             Settings.Default.Cut = cbMove.Checked;
-            Settings.Default.Source = tbSource.Text;
-            Settings.Default.Destiny = tbDestiny.Text;
-            Settings.Default.Collect = tbCollect.Text;
-            Settings.Default.Ignore = tbIgnore.Text;
             Settings.Default.TabPage = oTabControl.SelectedIndex;
             Settings.Default.Save();
-
+            
             oTokenSource?.Dispose();
         }
 
-        private async void btCopy_Click(object oSender, EventArgs oArgs)
+        internal void HandleFileBrowser(string sTitle, string fileName, string defaultExtension, TextBox oDestiny)
+        {
+            oSaveFileDialog.Title = sTitle;
+            oSaveFileDialog.FileName = fileName;
+
+            if(!string.IsNullOrWhiteSpace(oDestiny.Text))
+                oSaveFileDialog.InitialDirectory = Path.GetDirectoryName(oDestiny.Text);
+            
+            oSaveFileDialog.DefaultExt = defaultExtension;
+
+            if (oSaveFileDialog.ShowDialog() == DialogResult.OK)
+                oDestiny.Text = oSaveFileDialog.FileName;
+        }
+
+        public async void btCopy_Click(object oSender, EventArgs oArgs)
         {
             try
             {
-                oTokenSource = oTokenSource ?? new CancellationTokenSource();
+                oTokenSource ??= new CancellationTokenSource();
 
                 if (bProcessing)
                 {
@@ -57,16 +64,7 @@ namespace kopator
                     return;
                 }
 
-                switch(Mode)
-                {
-                    case kopatorMode.Copy:
-                        await Copy().ConfigureAwait(true);
-                        break;
-
-                    case kopatorMode.Collect:
-                        await Collect().ConfigureAwait(true);
-                        break;
-                }
+                await _currentControl.Run().ConfigureAwait(true);
             }
             catch (Exception oException)
             {
@@ -79,144 +77,43 @@ namespace kopator
             }
         }
 
-        private async Task Copy()
-        {
-            var bMove = cbMove.Checked;
-            var sSourcePath = Path.GetFullPath(tbSource.Text);
-            var sDestinyPath = Path.GetFullPath(tbDestiny.Text);
-
-            // check for null/empty
-            if (string.IsNullOrEmpty(sSourcePath) || string.IsNullOrEmpty(sDestinyPath))
-            {
-                MessageBox.Show("Bitte Ziel- und Quellordner angeben!");
-                return;
-            }
-
-            // check source
-            if (!CheckDirectory(sSourcePath, true, bMove))
-            {
-                MessageBox.Show("Keine Lese- und/oder Schreibrechte für den Quellordner!");
-                return;
-            }
-
-            // create directory if it is not existing
-            if (!Directory.Exists(sDestinyPath))
-                Directory.CreateDirectory(sDestinyPath);
-
-            // check destiny
-            if (!CheckDirectory(sDestinyPath, false, true))
-            {
-                MessageBox.Show("Keine Schreibrechte für den Zielordner!");
-                return;
-            }
-
-            // init process start
-            SetProcessInWork(true);
-            oTokenSource = new CancellationTokenSource();
-
-            var oProgress = new Progress<bool>(x => oProgressBar.PerformStep());
-
-            // get files
-            var a_sFiles = Directory.GetFiles(sSourcePath);
-
-            // set progressbar
-            oProgressBar.Maximum = a_sFiles.Length;
-
-            await Task.Run(() => DoProcessing(oProgress, bMove, sDestinyPath, a_sFiles), oTokenSource.Token).ConfigureAwait(false);
-            SetProcessInWork(false);
-
-            if (oTokenSource?.IsCancellationRequested ?? true)
-                MessageBox.Show("Kopiervorgang abgebrochen!");
-            else
-            {
-                MessageBox.Show("Kopiervorgang abgeschlossen!");
-                Close();
-            }
-        }
-
-        private async Task Collect()
-        {
-            var sPath = Path.GetFullPath(tbCollect.Text);
-
-            // check for null/empty
-            if (string.IsNullOrEmpty(sPath))
-            {
-                MessageBox.Show("Bitte Ziel- und Quellordner angeben!");
-                return;
-            }
-
-            // check path
-            if (!CheckDirectory(sPath, true, true))
-            {
-                MessageBox.Show("Keine Lese- und/oder Schreibrechte für den Quellordner!");
-                return;
-            }
-
-            // init process start
-            SetProcessInWork(true);
-            oTokenSource = new CancellationTokenSource();
-
-            var oProgress = new Progress<bool>(x => oProgressBar.PerformStep());
-
-            // get sub dirs
-            var a_sDirs = Directory.GetDirectories(sPath);
-            var a_sFilesNotIncluded = tbIgnore.Text.Split(',').Select(t => t.Trim(' ')).Select(t => Directory.GetFiles(sPath, t, System.IO.SearchOption.AllDirectories)).SelectMany(s => s).ToArray();
-            var a_sAllFiles = Directory.GetFiles(sPath, "*", System.IO.SearchOption.AllDirectories);
-            var a_sFiles = a_sAllFiles.Except(a_sFilesNotIncluded).ToArray();
-
-            // set progressbar
-            oProgressBar.Maximum = a_sFiles.Length;
-
-            await Task.Run(() => DoProcessing(oProgress, true, sPath, a_sFiles), oTokenSource.Token).ConfigureAwait(true);
-            await Task.Run(() => a_sDirs.ToList().ForEach(d => DeleteDirectory(d))).ConfigureAwait(true);
-            SetProcessInWork(false);
-
-            if (oTokenSource?.IsCancellationRequested ?? true)
-                MessageBox.Show("Sammelvorgang abgebrochen!");
-            else
-            {
-                MessageBox.Show("Sammelvorgang abgeschlossen!");
-                Close();
-            }
-        }
-
-        
         private void btClose_Click(object oSender, EventArgs oArgs) => Close();
         private void cbMove_CheckedChanged(object oSender, EventArgs oArgs) => btCopy.Text = GetBtCopyText();
-
-        private void btDestinyDotDotDot_Click(object oSender, EventArgs oArgs) => HandleFolderBrowser("Quelle auswählen.", false, tbDestiny);
-        private void btSourceDotDotDot_Click(object oSender, EventArgs oArgs) => HandleFolderBrowser("Ziel auswählen.", true, tbSource);
-        private void btCollectDotDotDot_Click(object oSender, EventArgs oArgs) => HandleFolderBrowser("Sammelziel auswählen.", false, tbCollect);
-
-        private void HandleFolderBrowser(string sDescription, bool bShowNewFolderButton, TextBox oDestinyBox)
+        
+        public void HandleFolderBrowser(string sDescription, bool bShowNewFolderButton, TextBox oDestinyBox)
         {
             oFolderBrowserDialog.Description = sDescription;
             oFolderBrowserDialog.ShowNewFolderButton = bShowNewFolderButton;
-            oFolderBrowserDialog.SelectedPath = tbDestiny.Text;
+            oFolderBrowserDialog.SelectedPath = oDestinyBox.Text;
 
             if (oFolderBrowserDialog.ShowDialog() == DialogResult.OK)
                 oDestinyBox.Text = oFolderBrowserDialog.SelectedPath;
         }
 
-        private void SetProcessInWork(bool bProcessing)
+        public void SetProcessInWork(bool bProcessing)
         {
             this.bProcessing = bProcessing;
 
             btClose.Enabled = !bProcessing;
-            //btCopy.Enabled = !bProcessing;
             btCopy.Text = bProcessing ? "Stop" : GetBtCopyText();
-            btSourceDotDotDot.Enabled = !bProcessing;
-            btDestinyDotDotDot.Enabled = !bProcessing;
-            tbSource.Enabled = !bProcessing;
-            tbDestiny.Enabled = !bProcessing;
+            oTabControl.Enabled = !bProcessing;
             cbMove.Enabled = !bProcessing;
 
             oProgressBar.Enabled = bProcessing;
         }
 
-        private string GetBtCopyText() => Mode == kopatorMode.Collect ? "Sammeln" : cbMove.Checked ? "Verschieben" : "Kopieren";
+        public string GetBtCopyText()
+        {
+            switch(Mode)
+            {
+                case kopatorMode.Copy: return cbMove.Checked ? "Verschieben" : "Kopieren";
+                case kopatorMode.Collect: return "Sammeln";
+                case kopatorMode.Catalog: return "Katalogisieren";
+            }
+            return string.Empty;
+        }
 
-        public static bool CheckDirectory(string sDirPath, bool bReadable, bool bWritable)
+        public bool CheckDirectory(string sDirPath, bool bReadable, bool bWritable)
         {
             try
             {
@@ -239,7 +136,7 @@ namespace kopator
             }
         }
 
-        private void DoProcessing(IProgress<bool> oProgress, bool bCut, string sDestinyPath, string[] a_sFiles)
+        public void DoProcessing(IProgress<bool> oProgress, bool bCut, string sDestinyPath, string[] a_sFiles)
         {
             foreach (var sFile in a_sFiles)
             {
@@ -276,7 +173,7 @@ namespace kopator
             }
         }
 
-        private void DeleteDirectory(string sRoot)
+        public void DeleteDirectory(string sRoot)
         {
             foreach (var sDir in Directory.GetDirectories(sRoot))
                 DeleteDirectory(sDir);
@@ -295,11 +192,34 @@ namespace kopator
             }
         }
 
-        private void oTabControl_Selected(object ooSender, TabControlEventArgs oArgs)
+        private void oTabControl_Selected(object oSender, TabControlEventArgs oArgs)
         {
-            Mode = (kopatorMode)oArgs.TabPageIndex;
+            if(oArgs.TabPageIndex < 0)
+                return;
+
+            SetTabPageControl(oArgs.TabPageIndex);
+        }
+
+        private void SetTabPageControl(int tabPageIndex)
+        {
+            Mode = (kopatorMode)tabPageIndex;
+            
             cbMove.Enabled = Mode == kopatorMode.Copy;
             btCopy.Text = GetBtCopyText();
+
+            if(_currentControl != null)
+                return;
+
+            Control cToAdd = null;
+            switch(Mode)
+            {
+                case kopatorMode.Copy: cToAdd = new CopyControl(); break;
+                case kopatorMode.Collect: cToAdd = new CollectControl(); break;
+                case kopatorMode.Catalog: cToAdd = new CatalogControl(); break;
+            }
+
+            oTabControl.SelectedTab.Controls.Add(cToAdd);
+            oTabControl.PerformLayout();
         }
     }
 }

@@ -2,7 +2,8 @@
 {
     public enum kopatorMode
     {
-        Copy,
-        Collect
+        Copy = 0,
+        Collect = 1,
+        Catalog = 2
     }
 }

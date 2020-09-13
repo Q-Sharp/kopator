@@ -20,5 +20,14 @@
     <Setting Name="Ignore" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="CatCSV" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="CatSource" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="CatType" Type="System.String" Scope="User">
+      <Value Profile="(Default)">jpg</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
+﻿using kopator.Properties;
+using System;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using kopator.Properties;
-using System.IO;
-using System.Threading;
 
 namespace kopator
 {
@@ -35,8 +30,8 @@ namespace kopator
         public async Task Run()
         {
             var bMove = _parentForm.cbMove.Checked;
-            var sSourcePath = Path.GetFullPath(tbSource.Text);
-            var sDestinyPath = Path.GetFullPath(tbDestiny.Text);
+            var sSourcePath = _parentForm.GetFullPath(tbSource.Text);
+            var sDestinyPath = _parentForm.GetFullPath(tbDestiny.Text);
 
             // check for null/empty
             if (string.IsNullOrEmpty(sSourcePath) || string.IsNullOrEmpty(sDestinyPath))
@@ -65,23 +60,23 @@ namespace kopator
 
             // init process start
             _parentForm.SetProcessInWork(true);
-            _parentForm.oTokenSource = new CancellationTokenSource();
+            _parentForm.TokenSource = new CancellationTokenSource();
 
-            var oProgress = new Progress<bool>(x => _parentForm.oProgressBar.PerformStep());
+            var oProgress = new Progress<bool>(x => _parentForm.ProgressBar.PerformStep());
 
             // get files
             var a_sFiles = Directory.GetFiles(sSourcePath);
 
             // set progressbar
-            _parentForm.oProgressBar.Maximum = a_sFiles.Length;
+            _parentForm.ProgressBar.Maximum = a_sFiles.Length;
 
-            await Task.Run(() => _parentForm.DoProcessing(oProgress, bMove, sDestinyPath, a_sFiles), _parentForm.oTokenSource.Token).ConfigureAwait(false);
+            await Task.Run(() => _parentForm.DoProcessing(oProgress, bMove, sDestinyPath, a_sFiles), _parentForm.TokenSource.Token).ConfigureAwait(false);
 
             _parentForm.Invoke(new Action(() => 
             {
                 _parentForm.SetProcessInWork(false);
 
-                if (_parentForm.oTokenSource?.IsCancellationRequested ?? true)
+                if (_parentForm.TokenSource?.IsCancellationRequested ?? true)
                     MessageBox.Show("Kopiervorgang abgebrochen!");
                 else
                 {

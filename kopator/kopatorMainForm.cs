@@ -10,8 +10,8 @@ namespace kopator
     public partial class kopatorMainForm : Form
     {
         private IkopatorControl _currentControl => oTabControl?.SelectedTab?.Controls?.OfType<IkopatorControl>()?.FirstOrDefault();
-        public bool bProcessing { get; set; }
-        public CancellationTokenSource oTokenSource { get; set; } = new CancellationTokenSource();
+        public bool IsProcessing { get; set; }
+        public CancellationTokenSource TokenSource { get; set; } = new CancellationTokenSource();
 
         public kopatorMainForm() => InitializeComponent();
         public kopatorMode Mode { get; set; }
@@ -25,7 +25,7 @@ namespace kopator
 
         private void kopatorMainForm_FormClosing(object oSender, FormClosingEventArgs oArgs)
         {
-            if (bProcessing)
+            if (IsProcessing)
             {
                 oArgs.Cancel = true;
                 return;
@@ -35,7 +35,7 @@ namespace kopator
             Settings.Default.TabPage = oTabControl.SelectedIndex;
             Settings.Default.Save();
             
-            oTokenSource?.Dispose();
+            TokenSource?.Dispose();
         }
 
         internal void HandleFileBrowser(string sTitle, string fileName, string defaultExtension, TextBox oDestiny)
@@ -56,11 +56,11 @@ namespace kopator
         {
             try
             {
-                oTokenSource ??= new CancellationTokenSource();
+                TokenSource ??= new CancellationTokenSource();
 
-                if (bProcessing)
+                if (IsProcessing)
                 {
-                    oTokenSource?.Cancel();
+                    TokenSource?.Cancel();
                     return;
                 }
 
@@ -72,8 +72,8 @@ namespace kopator
             }
             finally
             {
-                oProgressBar.ResetText();
-                oTokenSource?.Dispose();
+                ProgressBar.ResetText();
+                TokenSource?.Dispose();
             }
         }
 
@@ -92,14 +92,14 @@ namespace kopator
 
         public void SetProcessInWork(bool bProcessing)
         {
-            this.bProcessing = bProcessing;
+            IsProcessing = bProcessing;
 
             btClose.Enabled = !bProcessing;
             btCopy.Text = bProcessing ? "Stop" : GetBtCopyText();
             oTabControl.Enabled = !bProcessing;
             cbMove.Enabled = !bProcessing;
 
-            oProgressBar.Enabled = bProcessing;
+            ProgressBar.Enabled = bProcessing;
         }
 
         public string GetBtCopyText()
@@ -142,7 +142,7 @@ namespace kopator
             {
                 try
                 {
-                    if (oTokenSource?.IsCancellationRequested ?? true)
+                    if (TokenSource?.IsCancellationRequested ?? true)
                         return;
 
                     var sOldPath = Path.Combine(Path.GetDirectoryName(sFile), Path.GetFileName(sFile));
@@ -163,7 +163,7 @@ namespace kopator
 
                     oProgress?.Report(true);
 
-                    if (oTokenSource?.IsCancellationRequested ?? true)
+                    if (TokenSource?.IsCancellationRequested ?? true)
                         return;
                 }
                 catch
@@ -221,5 +221,7 @@ namespace kopator
             oTabControl.SelectedTab.Controls.Add(cToAdd);
             oTabControl.PerformLayout();
         }
+
+        public string GetFullPath(string path) => string.IsNullOrWhiteSpace(path) ? null : Path.GetFullPath(path);
     }
 }

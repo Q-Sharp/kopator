@@ -41,7 +41,7 @@ namespace kopator
 
         public async Task Run()
         {
-            var sPath = Path.GetFullPath(tbCollect.Text);
+            var sPath = _parentForm.GetFullPath(tbCollect.Text);
 
             // check for null/empty
             if (string.IsNullOrEmpty(sPath))
@@ -59,9 +59,9 @@ namespace kopator
 
             // init process start
             _parentForm.SetProcessInWork(true);
-            _parentForm.oTokenSource = new CancellationTokenSource();
+            _parentForm.TokenSource = new CancellationTokenSource();
 
-            var oProgress = new Progress<bool>(x => _parentForm.oProgressBar.PerformStep());
+            var oProgress = new Progress<bool>(x => _parentForm.ProgressBar.PerformStep());
 
             // get sub dirs
             var a_sDirs = Directory.GetDirectories(sPath);
@@ -70,16 +70,16 @@ namespace kopator
             var a_sFiles = a_sAllFiles.Except(a_sFilesNotIncluded).ToArray();
 
             // set progressbar
-            _parentForm.oProgressBar.Maximum = a_sFiles.Length;
+            _parentForm.ProgressBar.Maximum = a_sFiles.Length;
 
-            await Task.Run(() => _parentForm.DoProcessing(oProgress, true, sPath, a_sFiles), _parentForm.oTokenSource.Token).ConfigureAwait(true);
+            await Task.Run(() => _parentForm.DoProcessing(oProgress, true, sPath, a_sFiles), _parentForm.TokenSource.Token).ConfigureAwait(true);
             await Task.Run(() => a_sDirs.ToList().ForEach(d => _parentForm.DeleteDirectory(d))).ConfigureAwait(true);
 
             _parentForm.Invoke(new Action(() => 
             {
                 _parentForm.SetProcessInWork(false);
 
-                if (_parentForm.oTokenSource?.IsCancellationRequested ?? true)
+                if (_parentForm.TokenSource?.IsCancellationRequested ?? true)
                     MessageBox.Show("Sammelvorgang abgebrochen!");
                 else
                 {

@@ -39,8 +39,8 @@ namespace kopator
 
         public async Task Run()
         {
-            var sSourcePath = Path.GetFullPath(tbSource.Text);
-            var sCSVPath = Path.GetFullPath(tbCSV.Text);
+            var sSourcePath = _parentForm.GetFullPath(tbSource.Text);
+            var sCSVPath =_parentForm.GetFullPath(tbCSV.Text);
             var sFileType = tbType.Text;
 
             // check for null/empty
@@ -59,23 +59,23 @@ namespace kopator
 
             // init process start
             _parentForm.SetProcessInWork(true);
-            _parentForm.oTokenSource = new CancellationTokenSource();
+            _parentForm.TokenSource = new CancellationTokenSource();
 
-            var oProgress = new Progress<bool>(x => _parentForm.oProgressBar.PerformStep());
+            var oProgress = new Progress<bool>(x => _parentForm.ProgressBar.PerformStep());
 
             // get files
             var a_sFiles = Directory.GetFiles(sSourcePath, $"*{(!string.IsNullOrWhiteSpace(sFileType) ? $".{sFileType}" : string.Empty)}", SearchOption.AllDirectories);
 
             // set progressbar
-            _parentForm.oProgressBar.Maximum = a_sFiles.Length;
+            _parentForm.ProgressBar.Maximum = a_sFiles.Length;
 
-            await Task.Run(() => DoProcessing(oProgress, sCSVPath, a_sFiles), _parentForm.oTokenSource.Token).ConfigureAwait(false);
+            await Task.Run(() => DoProcessing(oProgress, sCSVPath, a_sFiles), _parentForm.TokenSource.Token).ConfigureAwait(false);
 
             _parentForm.Invoke(new Action(() => 
             {
                  _parentForm.SetProcessInWork(false);
 
-                 if (_parentForm.oTokenSource?.IsCancellationRequested ?? true)
+                 if (_parentForm.TokenSource?.IsCancellationRequested ?? true)
                      MessageBox.Show("Katalogisiervorgang abgebrochen!");
                  else
                  {
@@ -91,20 +91,20 @@ namespace kopator
             StringBuilder sbOutput = new StringBuilder();
 
             sbOutput.AppendLine(string.Join(strSeperator, "Datei", "Datum"));
-            foreach (var sFile in a_sFiles)
+            foreach (var file in a_sFiles.Select(x => new { file = x, time = File.GetLastWriteTime(x) }).OrderBy(x => x.time))
             {
                 try
                 {
-                    if (_parentForm.oTokenSource?.IsCancellationRequested ?? true)
+                    if (_parentForm.TokenSource?.IsCancellationRequested ?? true)
                         return;
 
-                    var ct = File.GetCreationTime(sFile);
-                    var name = Path.GetFileName(sFile);
+                    var ct = file.time;
+                    var name = Path.GetFileName(file.file);
                     
                     sbOutput.AppendLine(string.Join(strSeperator, name, ct));
                     oProgress?.Report(true);
 
-                    if (_parentForm.oTokenSource?.IsCancellationRequested ?? true)
+                    if (_parentForm.TokenSource?.IsCancellationRequested ?? true)
                         return;
                 }
                 catch

@@ -32,7 +32,7 @@
             this.btCopy = new System.Windows.Forms.Button();
             this.btClose = new System.Windows.Forms.Button();
             this.oFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.oProgressBar = new System.Windows.Forms.ProgressBar();
+            this.ProgressBar = new System.Windows.Forms.ProgressBar();
             this.gbPaths = new System.Windows.Forms.GroupBox();
             this.oTabControl = new System.Windows.Forms.TabControl();
             this.tabCopy = new System.Windows.Forms.TabPage();
@@ -82,12 +82,12 @@
             // 
             // oProgressBar
             // 
-            this.oProgressBar.Enabled = false;
-            this.oProgressBar.Location = new System.Drawing.Point(10, 19);
-            this.oProgressBar.Name = "oProgressBar";
-            this.oProgressBar.Size = new System.Drawing.Size(478, 23);
-            this.oProgressBar.Step = 1;
-            this.oProgressBar.TabIndex = 3;
+            this.ProgressBar.Enabled = false;
+            this.ProgressBar.Location = new System.Drawing.Point(10, 19);
+            this.ProgressBar.Name = "oProgressBar";
+            this.ProgressBar.Size = new System.Drawing.Size(478, 23);
+            this.ProgressBar.Step = 1;
+            this.ProgressBar.TabIndex = 3;
             // 
             // gbPaths
             // 
@@ -182,7 +182,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.oProgressBar);
+            this.groupBox1.Controls.Add(this.ProgressBar);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(5, 170);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(5);
@@ -227,7 +227,7 @@
         private System.Windows.Forms.TabPage tabCollect;
         private System.Windows.Forms.TabPage tabCatalog;
         private System.Windows.Forms.TabPage tabCopy;
-        public System.Windows.Forms.ProgressBar oProgressBar;
+        public System.Windows.Forms.ProgressBar ProgressBar;
         public System.Windows.Forms.CheckBox cbMove;
         private System.Windows.Forms.SaveFileDialog oSaveFileDialog;
     }

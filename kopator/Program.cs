@@ -10,7 +10,7 @@ namespace kopator
         /// </summary>
         [STAThread]
         static void Main()
-        {
+       {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             var oForm = new kopatorMainForm();

@@ -47,6 +47,7 @@ namespace kopator
                 oSaveFileDialog.InitialDirectory = Path.GetDirectoryName(oDestiny.Text);
             
             oSaveFileDialog.DefaultExt = defaultExtension;
+            oSaveFileDialog.Filter = $"*.{defaultExtension.ToLower()}|";
 
             if (oSaveFileDialog.ShowDialog() == DialogResult.OK)
                 oDestiny.Text = oSaveFileDialog.FileName;

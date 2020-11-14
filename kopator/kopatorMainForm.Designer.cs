@@ -52,9 +52,10 @@
             // cbMove
             // 
             this.cbMove.AutoSize = true;
-            this.cbMove.Location = new System.Drawing.Point(301, 18);
+            this.cbMove.Location = new System.Drawing.Point(452, 28);
+            this.cbMove.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cbMove.Name = "cbMove";
-            this.cbMove.Size = new System.Drawing.Size(91, 17);
+            this.cbMove.Size = new System.Drawing.Size(133, 24);
             this.cbMove.TabIndex = 0;
             this.cbMove.Text = "Verschieben?";
             this.cbMove.UseVisualStyleBackColor = true;
@@ -62,9 +63,10 @@
             // 
             // btCopy
             // 
-            this.btCopy.Location = new System.Drawing.Point(398, 14);
+            this.btCopy.Location = new System.Drawing.Point(597, 22);
+            this.btCopy.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btCopy.Name = "btCopy";
-            this.btCopy.Size = new System.Drawing.Size(90, 23);
+            this.btCopy.Size = new System.Drawing.Size(135, 35);
             this.btCopy.TabIndex = 1;
             this.btCopy.Text = "Kopieren";
             this.btCopy.UseVisualStyleBackColor = true;
@@ -72,20 +74,22 @@
             // 
             // btClose
             // 
-            this.btClose.Location = new System.Drawing.Point(10, 14);
+            this.btClose.Location = new System.Drawing.Point(15, 22);
+            this.btClose.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btClose.Name = "btClose";
-            this.btClose.Size = new System.Drawing.Size(90, 23);
+            this.btClose.Size = new System.Drawing.Size(135, 35);
             this.btClose.TabIndex = 2;
             this.btClose.Text = "Schließen";
             this.btClose.UseVisualStyleBackColor = true;
             this.btClose.Click += new System.EventHandler(this.btClose_Click);
             // 
-            // oProgressBar
+            // ProgressBar
             // 
             this.ProgressBar.Enabled = false;
-            this.ProgressBar.Location = new System.Drawing.Point(10, 19);
-            this.ProgressBar.Name = "oProgressBar";
-            this.ProgressBar.Size = new System.Drawing.Size(478, 23);
+            this.ProgressBar.Location = new System.Drawing.Point(15, 29);
+            this.ProgressBar.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ProgressBar.Name = "ProgressBar";
+            this.ProgressBar.Size = new System.Drawing.Size(717, 35);
             this.ProgressBar.Step = 1;
             this.ProgressBar.TabIndex = 3;
             // 
@@ -93,10 +97,11 @@
             // 
             this.gbPaths.Controls.Add(this.oTabControl);
             this.gbPaths.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbPaths.Location = new System.Drawing.Point(5, 5);
-            this.gbPaths.Margin = new System.Windows.Forms.Padding(5);
+            this.gbPaths.Location = new System.Drawing.Point(8, 8);
+            this.gbPaths.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.gbPaths.Name = "gbPaths";
-            this.gbPaths.Size = new System.Drawing.Size(499, 155);
+            this.gbPaths.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbPaths.Size = new System.Drawing.Size(748, 283);
             this.gbPaths.TabIndex = 11;
             this.gbPaths.TabStop = false;
             this.gbPaths.Text = "Pfadangaben";
@@ -107,43 +112,44 @@
             this.oTabControl.Controls.Add(this.tabCollect);
             this.oTabControl.Controls.Add(this.tabCatalog);
             this.oTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.oTabControl.Location = new System.Drawing.Point(3, 16);
+            this.oTabControl.Location = new System.Drawing.Point(4, 24);
+            this.oTabControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.oTabControl.Name = "oTabControl";
             this.oTabControl.Padding = new System.Drawing.Point(5, 3);
             this.oTabControl.SelectedIndex = 0;
-            this.oTabControl.Size = new System.Drawing.Size(493, 136);
+            this.oTabControl.Size = new System.Drawing.Size(740, 254);
             this.oTabControl.TabIndex = 10;
             this.oTabControl.Selected += new System.Windows.Forms.TabControlEventHandler(this.oTabControl_Selected);
             // 
             // tabCopy
             // 
-            this.tabCopy.Location = new System.Drawing.Point(4, 22);
+            this.tabCopy.Location = new System.Drawing.Point(4, 29);
             this.tabCopy.Margin = new System.Windows.Forms.Padding(0);
             this.tabCopy.Name = "tabCopy";
-            this.tabCopy.Padding = new System.Windows.Forms.Padding(5);
-            this.tabCopy.Size = new System.Drawing.Size(485, 110);
+            this.tabCopy.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.tabCopy.Size = new System.Drawing.Size(732, 175);
             this.tabCopy.TabIndex = 0;
             this.tabCopy.Text = "Kopieren";
             this.tabCopy.UseVisualStyleBackColor = true;
             // 
             // tabCollect
             // 
-            this.tabCollect.Location = new System.Drawing.Point(4, 22);
+            this.tabCollect.Location = new System.Drawing.Point(4, 29);
             this.tabCollect.Margin = new System.Windows.Forms.Padding(0);
             this.tabCollect.Name = "tabCollect";
-            this.tabCollect.Padding = new System.Windows.Forms.Padding(5);
-            this.tabCollect.Size = new System.Drawing.Size(485, 85);
+            this.tabCollect.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.tabCollect.Size = new System.Drawing.Size(732, 175);
             this.tabCollect.TabIndex = 1;
             this.tabCollect.Text = "Sammeln";
             this.tabCollect.UseVisualStyleBackColor = true;
             // 
             // tabCatalog
             // 
-            this.tabCatalog.Location = new System.Drawing.Point(4, 22);
+            this.tabCatalog.Location = new System.Drawing.Point(4, 29);
             this.tabCatalog.Margin = new System.Windows.Forms.Padding(0);
             this.tabCatalog.Name = "tabCatalog";
-            this.tabCatalog.Padding = new System.Windows.Forms.Padding(5);
-            this.tabCatalog.Size = new System.Drawing.Size(485, 85);
+            this.tabCatalog.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.tabCatalog.Size = new System.Drawing.Size(732, 221);
             this.tabCatalog.TabIndex = 2;
             this.tabCatalog.Tag = "";
             this.tabCatalog.Text = "Katalogisieren";
@@ -164,7 +170,7 @@
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpMain.Size = new System.Drawing.Size(509, 286);
+            this.tlpMain.Size = new System.Drawing.Size(764, 486);
             this.tlpMain.TabIndex = 12;
             // 
             // gbControls
@@ -173,10 +179,11 @@
             this.gbControls.Controls.Add(this.cbMove);
             this.gbControls.Controls.Add(this.btCopy);
             this.gbControls.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbControls.Location = new System.Drawing.Point(5, 232);
-            this.gbControls.Margin = new System.Windows.Forms.Padding(5);
+            this.gbControls.Location = new System.Drawing.Point(8, 403);
+            this.gbControls.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.gbControls.Name = "gbControls";
-            this.gbControls.Size = new System.Drawing.Size(499, 49);
+            this.gbControls.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbControls.Size = new System.Drawing.Size(748, 75);
             this.gbControls.TabIndex = 13;
             this.gbControls.TabStop = false;
             // 
@@ -184,21 +191,25 @@
             // 
             this.groupBox1.Controls.Add(this.ProgressBar);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(5, 170);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(5);
+            this.groupBox1.Location = new System.Drawing.Point(8, 307);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(499, 52);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBox1.Size = new System.Drawing.Size(748, 80);
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Fortschritt";
             // 
             // kopatorMainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AcceptButton = this.btCopy;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(509, 286);
+            this.CancelButton = this.btClose;
+            this.ClientSize = new System.Drawing.Size(764, 486);
             this.Controls.Add(this.tlpMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "kopatorMainForm";

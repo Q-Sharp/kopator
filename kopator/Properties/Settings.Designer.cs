@@ -12,7 +12,7 @@ namespace kopator.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -98,12 +98,12 @@ namespace kopator.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string CatCSV {
+        public string CatDestinyFile {
             get {
-                return ((string)(this["CatCSV"]));
+                return ((string)(this["CatDestinyFile"]));
             }
             set {
-                this["CatCSV"] = value;
+                this["CatDestinyFile"] = value;
             }
         }
         
@@ -128,6 +128,18 @@ namespace kopator.Properties {
             }
             set {
                 this["CatType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("csv")]
+        public string CatExportType {
+            get {
+                return ((string)(this["CatExportType"]));
+            }
+            set {
+                this["CatExportType"] = value;
             }
         }
     }

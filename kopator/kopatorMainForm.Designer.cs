@@ -1,6 +1,6 @@
 ﻿namespace kopator
 {
-    partial class kopatorMainForm
+    partial class KopatorMainForm
     {
         /// <summary>
         /// Required designer variable.

@@ -2,7 +2,7 @@
 
 namespace kopator
 {
-    public interface IkopatorControl
+    public interface IKopatorControl
     {
         Task Run();
     }

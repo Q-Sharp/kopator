@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace kopator
 {
-    public static class Extenstions
+    public static class Extentions
     {
         public static bool IsImage(this string file, out Image thumbnail)
         {

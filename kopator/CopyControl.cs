@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace kopator
 {
-    public partial class CopyControl : UserControl, IkopatorControl
+    public partial class CopyControl : UserControl, IKopatorControl
     {
-        private kopatorMainForm _parentForm => FindForm() as kopatorMainForm;
+        private KopatorMainForm _parentForm => FindForm() as KopatorMainForm;
         public CopyControl() => InitializeComponent();
 
         private void CopyControl_Load(object sender, EventArgs e)

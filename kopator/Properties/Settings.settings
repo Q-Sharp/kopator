@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="Source" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">.</Value>
     </Setting>
     <Setting Name="Destiny" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">.</Value>
     </Setting>
     <Setting Name="Cut" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -15,16 +15,16 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="Collect" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">.</Value>
     </Setting>
     <Setting Name="Ignore" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">.</Value>
     </Setting>
     <Setting Name="CatDestinyFile" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">.</Value>
     </Setting>
     <Setting Name="CatSource" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">.</Value>
     </Setting>
     <Setting Name="CatType" Type="System.String" Scope="User">
       <Value Profile="(Default)">jpg</Value>

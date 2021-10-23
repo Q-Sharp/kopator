@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace kopator
 {
-    public partial class CatalogControl : UserControl, IkopatorControl
+    public partial class CatalogControl : UserControl, IKopatorControl
     {
-        private kopatorMainForm _parentForm => FindForm() as kopatorMainForm;
+        private KopatorMainForm _parentForm => FindForm() as KopatorMainForm;
         public CatalogControl() =>  InitializeComponent();
 
         private void CatalogControl_Load(object sender, EventArgs e)

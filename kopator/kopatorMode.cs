@@ -1,6 +1,6 @@
 ﻿namespace kopator
 {
-    public enum kopatorMode
+    public enum KopatorMode
     {
         Copy = 0,
         Collect = 1,

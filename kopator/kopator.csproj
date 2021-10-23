@@ -8,13 +8,14 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>kopator</RootNamespace>
     <AssemblyName>kopator</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>E:\dev\publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -34,7 +35,6 @@
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -58,6 +58,7 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>ExtendedCorrectnessRules.ruleset</CodeAnalysisRuleSet>
     <LangVersion>8.0</LangVersion>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>cpsuisam.ico</ApplicationIcon>
@@ -72,7 +73,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
@@ -116,15 +117,15 @@
     <Compile Include="CopyControl.Designer.cs">
       <DependentUpon>CopyControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extenstions.cs" />
-    <Compile Include="IkopatorControl.cs" />
-    <Compile Include="kopatorMainForm.cs">
+    <Compile Include="Extentions.cs" />
+    <Compile Include="IKopatorControl.cs" />
+    <Compile Include="KopatorMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="kopatorMainForm.Designer.cs">
-      <DependentUpon>kopatorMainForm.cs</DependentUpon>
+    <Compile Include="KopatorMainForm.Designer.cs">
+      <DependentUpon>KopatorMainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="kopatorMode.cs" />
+    <Compile Include="KopatorMode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CatalogControl.resx">
@@ -136,22 +137,13 @@
     <EmbeddedResource Include="CopyControl.resx">
       <DependentUpon>CopyControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="kopatorMainForm.resx">
-      <DependentUpon>kopatorMainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    <EmbeddedResource Include="KopatorMainForm.resx">
+      <DependentUpon>KopatorMainForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>

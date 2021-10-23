@@ -13,9 +13,9 @@ using System.Threading;
 
 namespace kopator
 {
-    public partial class CollectControl : UserControl, IkopatorControl
+    public partial class CollectControl : UserControl, IKopatorControl
     {
-        private kopatorMainForm _parentForm => FindForm() as kopatorMainForm;
+        private KopatorMainForm _parentForm => FindForm() as KopatorMainForm;
 
         public CollectControl()
         {

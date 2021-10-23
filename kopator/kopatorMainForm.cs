@@ -7,14 +7,14 @@ using System.Windows.Forms;
 
 namespace kopator
 {
-    public partial class kopatorMainForm : Form
+    public partial class KopatorMainForm : Form
     {
-        private IkopatorControl _currentControl => oTabControl?.SelectedTab?.Controls?.OfType<IkopatorControl>()?.FirstOrDefault();
+        private IKopatorControl _currentControl => oTabControl?.SelectedTab?.Controls?.OfType<IKopatorControl>()?.FirstOrDefault();
         public bool IsProcessing { get; set; }
         public CancellationTokenSource TokenSource { get; set; } = new CancellationTokenSource();
 
-        public kopatorMainForm() => InitializeComponent();
-        public kopatorMode Mode { get; set; }
+        public KopatorMainForm() => InitializeComponent();
+        public KopatorMode Mode { get; set; }
 
         private void kopatorMainForm_Load(object oSender, EventArgs oArgs)
         {
@@ -107,9 +107,9 @@ namespace kopator
         {
             switch(Mode)
             {
-                case kopatorMode.Copy: return cbMove.Checked ? "Verschieben" : "Kopieren";
-                case kopatorMode.Collect: return "Sammeln";
-                case kopatorMode.Catalog: return "Katalogisieren";
+                case KopatorMode.Copy: return cbMove.Checked ? "Verschieben" : "Kopieren";
+                case KopatorMode.Collect: return "Sammeln";
+                case KopatorMode.Catalog: return "Katalogisieren";
             }
             return string.Empty;
         }
@@ -203,9 +203,9 @@ namespace kopator
 
         private void SetTabPageControl(int tabPageIndex)
         {
-            Mode = (kopatorMode)tabPageIndex;
+            Mode = (KopatorMode)tabPageIndex;
             
-            cbMove.Enabled = Mode == kopatorMode.Copy;
+            cbMove.Enabled = Mode == KopatorMode.Copy;
             btCopy.Text = GetBtCopyText();
 
             if(_currentControl != null)
@@ -214,9 +214,9 @@ namespace kopator
             Control cToAdd = null;
             switch(Mode)
             {
-                case kopatorMode.Copy: cToAdd = new CopyControl(); break;
-                case kopatorMode.Collect: cToAdd = new CollectControl(); break;
-                case kopatorMode.Catalog: cToAdd = new CatalogControl(); break;
+                case KopatorMode.Copy: cToAdd = new CopyControl(); break;
+                case KopatorMode.Collect: cToAdd = new CollectControl(); break;
+                case KopatorMode.Catalog: cToAdd = new CatalogControl(); break;
             }
 
             oTabControl.SelectedTab.Controls.Add(cToAdd);

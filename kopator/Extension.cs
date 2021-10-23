@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace kopator
 {
-    public static class Extentions
+    public static class Extension
     {
         public static bool IsImage(this string file, out Image thumbnail)
         {

@@ -117,7 +117,7 @@
     <Compile Include="CopyControl.Designer.cs">
       <DependentUpon>CopyControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Extentions.cs" />
+    <Compile Include="Extension.cs" />
     <Compile Include="IKopatorControl.cs" />
     <Compile Include="KopatorMainForm.cs">
       <SubType>Form</SubType>

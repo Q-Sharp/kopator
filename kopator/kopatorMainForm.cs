@@ -1,7 +1,8 @@
 ﻿using kopator.Properties;
 using System;
-using System.IO;
+using Alphaleonis.Win32.Filesystem;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -9,6 +10,13 @@ namespace kopator
 {
     public partial class KopatorMainForm : Form
     {
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern bool DeleteFile(string path);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern bool RemoveDirectory(string path);
+
+
         private IKopatorControl _currentControl => oTabControl?.SelectedTab?.Controls?.OfType<IKopatorControl>()?.FirstOrDefault();
         public bool IsProcessing { get; set; }
         public CancellationTokenSource TokenSource { get; set; } = new CancellationTokenSource();
@@ -120,7 +128,7 @@ namespace kopator
             {
                 if (bWritable)
                 {
-                    using (var fs = File.Create(Path.Combine(sDirPath, Path.GetRandomFileName()), 1, FileOptions.DeleteOnClose))
+                    using (var fs = File.Create(Path.Combine(sDirPath, Path.GetRandomFileName()), 1, System.IO.FileOptions.DeleteOnClose))
                     {
                     }
                     return true;
@@ -183,13 +191,14 @@ namespace kopator
             {
                 Directory.Delete(sRoot, true);
             }
-            catch (IOException)
+            catch (Exception)
             {
-                Directory.Delete(sRoot, true);
-            }
-            catch (UnauthorizedAccessException)
-            {
-                Directory.Delete(sRoot, true);
+                var files = Directory.GetFiles(sRoot);
+
+                foreach (var f in files)
+                    DeleteFile(f);
+
+                RemoveDirectory(sRoot);
             }
         }
 

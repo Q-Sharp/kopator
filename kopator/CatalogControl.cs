@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using kopator.Properties;
-using System.IO;
+using Alphaleonis.Win32.Filesystem;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -69,7 +69,7 @@ namespace kopator
             var oProgress = new Progress<bool>(x => _parentForm.ProgressBar.PerformStep());
 
             // get files
-            var a_sFiles = Directory.GetFiles(sSourcePath, $"*{(!string.IsNullOrWhiteSpace(sFileType) ? $".{sFileType}" : string.Empty)}", SearchOption.AllDirectories);
+            var a_sFiles = Directory.GetFiles(sSourcePath, $"*{(!string.IsNullOrWhiteSpace(sFileType) ? $".{sFileType}" : string.Empty)}", System.IO.SearchOption.AllDirectories);
 
             // set progressbOutputar
             _parentForm.ProgressBar.Maximum = a_sFiles.Length;

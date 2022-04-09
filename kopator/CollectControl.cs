@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
+﻿using Alphaleonis.Win32.Filesystem;
+
+using kopator.Properties;
+
+using System;
 using System.Data;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using kopator.Properties;
-using System.IO;
-using System.Threading;
 
 namespace kopator
 {
@@ -65,8 +63,13 @@ namespace kopator
 
             // get sub dirs
             var a_sDirs = Directory.GetDirectories(sPath);
-            var a_sFilesNotIncluded = tbIgnore.Text.Split(',').Select(t => t.Trim(' ')).Select(t => Directory.GetFiles(sPath, t, SearchOption.AllDirectories)).SelectMany(s => s).ToArray();
-            var a_sAllFiles = Directory.GetFiles(sPath, "*", SearchOption.AllDirectories);
+            var a_sFilesNotIncluded = tbIgnore.Text.Split(',')
+                .Select(t => t.Trim(' '))
+                .Select(t => Directory.GetFiles(sPath, t, System.IO.SearchOption.AllDirectories))
+                .SelectMany(s => s)
+                .ToArray();
+
+            var a_sAllFiles = Directory.GetFiles(sPath, "*", System.IO.SearchOption.AllDirectories);
             var a_sFiles = a_sAllFiles.Except(a_sFilesNotIncluded).ToArray();
 
             // set progressbar

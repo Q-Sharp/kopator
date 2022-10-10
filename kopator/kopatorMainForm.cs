@@ -111,16 +111,13 @@ namespace kopator
             ProgressBar.Enabled = bProcessing;
         }
 
-        public string GetBtCopyText()
+        public string GetBtCopyText() => Mode switch
         {
-            switch(Mode)
-            {
-                case KopatorMode.Copy: return cbMove.Checked ? "Verschieben" : "Kopieren";
-                case KopatorMode.Collect: return "Sammeln";
-                case KopatorMode.Catalog: return "Katalogisieren";
-            }
-            return string.Empty;
-        }
+            KopatorMode.Copy => cbMove.Checked ? "Verschieben" : "Kopieren",
+            KopatorMode.Collect => "Sammeln",
+            KopatorMode.Catalog => "Katalogisieren",
+            _ => string.Empty,
+        };
 
         public bool CheckDirectory(string sDirPath, bool bReadable, bool bWritable)
         {

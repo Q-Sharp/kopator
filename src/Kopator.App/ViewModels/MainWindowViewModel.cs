@@ -57,18 +57,31 @@ public sealed partial class MainWindowViewModel : ViewModelBase
     [NotifyPropertyChangedFor(nameof(ActionLabel))]
     [NotifyPropertyChangedFor(nameof(IsIdle))]
     [NotifyPropertyChangedFor(nameof(IsMoveEnabled))]
+    [NotifyPropertyChangedFor(nameof(StatusText))]
     public partial bool IsProcessing { get; set; }
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StatusText))]
     public partial int Progress { get; set; }
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StatusText))]
     public partial int ProgressMaximum { get; set; } = 1;
+
+    /// <summary>Number of items the current run started with, shown alongside the bar.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StatusText))]
+    public partial int TotalItems { get; set; }
 
     /// <summary>The action button doubles as the stop button while an operation runs.</summary>
     public string ActionLabel => IsProcessing ? "Stop" : SelectedTab.ActionLabel;
 
     public bool IsIdle => !IsProcessing;
+
+    /// <summary>Progress in words, because a bar alone does not say how much is left.</summary>
+    public string StatusText => IsProcessing
+        ? $"{Progress} von {TotalItems} Dateien"
+        : "Bereit";
 
     /// <summary>Moving is a copy-tab concept; collecting always moves and cataloguing never does.</summary>
     public bool IsMoveEnabled => !IsProcessing && SelectedTab.Mode == KopatorMode.Copy;
@@ -94,11 +107,14 @@ public sealed partial class MainWindowViewModel : ViewModelBase
         using var cancellation = new CancellationTokenSource();
         _cancellation = cancellation;
 
+        var total = tab.CountItems();
+
         IsProcessing = true;
         Progress = 0;
+        TotalItems = total;
 
         // A zero maximum would render as a full bar, so an empty run shows an empty one.
-        ProgressMaximum = Math.Max(1, tab.CountItems());
+        ProgressMaximum = Math.Max(1, total);
 
         try
         {

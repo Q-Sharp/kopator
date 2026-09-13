@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Kopator.App/Kopator.App.csproj" />
+    <Project Path="src/Kopator.Core/Kopator.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Kopator.Core.Tests/Kopator.Core.Tests.csproj" />
+  </Folder>
+</Solution>

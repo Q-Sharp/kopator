@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Kopator.App.ViewModels"
+             xmlns:conv="using:Kopator.App.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="200"
+             x:Class="Kopator.App.Views.CatalogView"
+             x:DataType="vm:CatalogViewModel">
+
+    <Grid ColumnDefinitions="110,*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" Margin="12">
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Quelle:" VerticalAlignment="Center" />
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Source}" Margin="0,0,8,0" />
+        <Button Grid.Row="0" Grid.Column="2" Content="..." MinWidth="44"
+                Command="{Binding BrowseSourceCommand}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Zieldatei:" VerticalAlignment="Center" Margin="0,8,0,0" />
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding DestinationFile}" Margin="0,8,8,0" />
+        <Button Grid.Row="1" Grid.Column="2" Content="..." MinWidth="44" Margin="0,8,0,0"
+                Command="{Binding BrowseDestinationFileCommand}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Dateityp:" VerticalAlignment="Center" Margin="0,8,0,0" />
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FileType}"
+                 PlaceholderText="jpg – leer listet alle Dateien" Margin="0,8,8,0" />
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Exporttyp:" VerticalAlignment="Center" Margin="0,8,0,0" />
+        <ComboBox Grid.Row="3" Grid.Column="1"
+                  ItemsSource="{Binding ExportTypes}"
+                  SelectedItem="{Binding ExportType}"
+                  HorizontalAlignment="Left" MinWidth="140" Margin="0,8,8,0">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Converter={x:Static conv:ExportTypeNameConverter.Instance}}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+    </Grid>
+
+</UserControl>

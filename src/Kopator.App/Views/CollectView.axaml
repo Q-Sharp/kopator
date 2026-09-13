@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Kopator.App.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="140"
+             x:Class="Kopator.App.Views.CollectView"
+             x:DataType="vm:CollectViewModel">
+
+    <Grid ColumnDefinitions="110,*,Auto" RowDefinitions="Auto,Auto,Auto" Margin="12">
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Pfad:" VerticalAlignment="Center" />
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path}" Margin="0,0,8,0" />
+        <Button Grid.Row="0" Grid.Column="2" Content="..." MinWidth="44"
+                Command="{Binding BrowsePathCommand}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Ignorieren:" VerticalAlignment="Center" Margin="0,8,0,0" />
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Ignore}"
+                 PlaceholderText="*.tmp, *.bak" Margin="0,8,0,0" />
+
+        <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,4,0,0"
+                   Opacity="0.7" TextWrapping="Wrap"
+                   Text="Kommagetrennte Muster. Ignorierte Dateien werden nicht gesammelt und mit ihrem Unterordner gelöscht." />
+
+    </Grid>
+
+</UserControl>

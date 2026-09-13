@@ -1,0 +1,86 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Kopator.App.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="720" d:DesignHeight="440"
+        x:Class="Kopator.App.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/cpsuisam.ico"
+        Title="kopator"
+        Width="700" Height="424"
+        MinWidth="600" MinHeight="424"
+        Background="{DynamicResource PageBackground}"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid RowDefinitions="*,Auto,Auto" Margin="20">
+
+        <!-- Tabs carry the mode; the card below them holds that mode's fields. -->
+        <TabControl Grid.Row="0"
+                    ItemsSource="{Binding Tabs}"
+                    SelectedItem="{Binding SelectedTab}"
+                    IsEnabled="{Binding IsIdle}"
+                    Padding="0"
+                    Margin="0,0,0,12">
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="vm:OperationViewModel">
+                    <TextBlock Text="{Binding Header}" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate DataType="vm:OperationViewModel">
+                    <Border Classes="card">
+                        <ContentControl Content="{Binding}" />
+                    </Border>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+
+        <StackPanel Grid.Row="1" Margin="0,4,0,16">
+            <TextBlock Classes="section" Text="FORTSCHRITT" />
+            <Border Classes="card" Padding="16,14">
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                    <ProgressBar Grid.Column="0"
+                                 Value="{Binding Progress}"
+                                 Maximum="{Binding ProgressMaximum}"
+                                 IsIndeterminate="False"
+                                 Height="6"
+                                 CornerRadius="3"
+                                 VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1"
+                               Classes="hint"
+                               Text="{Binding StatusText}"
+                               MinWidth="130"
+                               TextAlignment="Right"
+                               VerticalAlignment="Center"
+                               Margin="16,0,0,0" />
+                </Grid>
+            </Border>
+        </StackPanel>
+
+        <Grid Grid.Row="2" ColumnDefinitions="Auto,*,Auto,Auto">
+            <Button Grid.Column="0"
+                    Classes="secondary"
+                    Content="Schließen"
+                    IsEnabled="{Binding IsIdle}"
+                    Command="{Binding CloseCommand}" />
+
+            <CheckBox Grid.Column="2"
+                      Content="Verschieben"
+                      VerticalAlignment="Center"
+                      Margin="0,0,16,0"
+                      IsChecked="{Binding Move}"
+                      IsEnabled="{Binding IsMoveEnabled}"
+                      ToolTip.Tip="Dateien verschieben statt kopieren" />
+
+            <Button Grid.Column="3"
+                    Classes="action accent"
+                    Theme="{StaticResource SolidButton}"
+                    Content="{Binding ActionLabel}"
+                    IsDefault="True"
+                    Command="{Binding ExecuteCommand}" />
+        </Grid>
+
+    </Grid>
+
+</Window>

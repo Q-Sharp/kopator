@@ -10,7 +10,7 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <Authors>QoOdrink3r</Authors>
     <Product>kopator</Product>
-    <RepositoryUrl>https://github.com/QoOdrink3r/kopator</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Q-Sharp/kopator</RepositoryUrl>
   </PropertyGroup>
 
   <!-- SemVer versioning derived from git tags (vX.Y.Z). Untagged builds become

@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Kopator.App.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="660" d:DesignHeight="160"
+             x:Class="Kopator.App.Views.CopyView"
+             x:DataType="vm:CopyViewModel">
+
+    <Grid ColumnDefinitions="90,*,Auto" RowDefinitions="Auto,Auto,Auto" Margin="20,18" VerticalAlignment="Top">
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Classes="field" Text="Quelle" />
+        <TextBox Grid.Row="0" Grid.Column="1" Classes="field" Text="{Binding Source}"
+                 PlaceholderText="Ordner, aus dem gelesen wird" />
+        <Button Grid.Row="0" Grid.Column="2" Classes="browse" Content="…"
+                Command="{Binding BrowseSourceCommand}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Classes="field" Text="Ziel" Margin="0,12,12,0" />
+        <TextBox Grid.Row="1" Grid.Column="1" Classes="field" Text="{Binding Destination}"
+                 PlaceholderText="Ordner, in den geschrieben wird" Margin="0,12,0,0" />
+        <Button Grid.Row="1" Grid.Column="2" Classes="browse" Content="…" Margin="8,12,0,0"
+                Command="{Binding BrowseDestinationCommand}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Classes="hint" Margin="0,10,0,0"
+                   Text="Nur die Dateien direkt im Quellordner; Unterordner bleiben unberührt." />
+
+    </Grid>
+
+</UserControl>

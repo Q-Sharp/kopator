@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Kopator.App.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="660" d:DesignHeight="160"
+             x:Class="Kopator.App.Views.CollectView"
+             x:DataType="vm:CollectViewModel">
+
+    <Grid ColumnDefinitions="90,*,Auto" RowDefinitions="Auto,Auto,Auto" Margin="20,18" VerticalAlignment="Top">
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Classes="field" Text="Ordner" />
+        <TextBox Grid.Row="0" Grid.Column="1" Classes="field" Text="{Binding Path}"
+                 PlaceholderText="Ordner, der zusammengeführt wird" />
+        <Button Grid.Row="0" Grid.Column="2" Classes="browse" Content="…"
+                Command="{Binding BrowsePathCommand}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Classes="field" Text="Ignorieren" Margin="0,12,12,0" />
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Classes="field" Text="{Binding Ignore}"
+                 PlaceholderText="*.tmp, *.bak" Margin="0,12,0,0" />
+
+        <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Classes="hint" Margin="0,10,0,0"
+                   Text="Alle Dateien wandern in den Ordner, danach werden sämtliche Unterordner gelöscht — ignorierte Dateien darin ebenfalls." />
+
+    </Grid>
+
+</UserControl>

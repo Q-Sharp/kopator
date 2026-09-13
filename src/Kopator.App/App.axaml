@@ -1,0 +1,103 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:Kopator.App"
+             x:Class="Kopator.App.App"
+             RequestedThemeVariant="Default">
+
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <!-- Own tokens rather than theme internals, so light and dark stay under
+                 our control and cannot shift with an Avalonia update. -->
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="PageBackground" Color="#F4F5F7" />
+                    <SolidColorBrush x:Key="CardBackground" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="CardBorder" Color="#E3E5E8" />
+                    <SolidColorBrush x:Key="SubtleForeground" Color="#5C6470" />
+                    <SolidColorBrush x:Key="SectionForeground" Color="#8A919B" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="PageBackground" Color="#1B1D21" />
+                    <SolidColorBrush x:Key="CardBackground" Color="#282C32" />
+                    <SolidColorBrush x:Key="CardBorder" Color="#3A3F47" />
+                    <SolidColorBrush x:Key="SubtleForeground" Color="#A7AEB8" />
+                    <SolidColorBrush x:Key="SectionForeground" Color="#7C838D" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+
+            <x:Double x:Key="FieldHeight">34</x:Double>
+            <CornerRadius x:Key="CardCorner">8</CornerRadius>
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+
+        <!-- A card: the visual unit the window is built from. -->
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="{DynamicResource CardBackground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="{DynamicResource CardCorner}" />
+        </Style>
+
+        <!-- Small upper-case caption above a card. -->
+        <Style Selector="TextBlock.section">
+            <Setter Property="Foreground" Value="{DynamicResource SectionForeground}" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="2,0,0,6" />
+        </Style>
+
+        <!-- Form field label. -->
+        <Style Selector="TextBlock.field">
+            <Setter Property="Foreground" Value="{DynamicResource SubtleForeground}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,12,0" />
+        </Style>
+
+        <!-- Hint under a field. -->
+        <Style Selector="TextBlock.hint">
+            <Setter Property="Foreground" Value="{DynamicResource SectionForeground}" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+
+        <Style Selector="TextBox.field">
+            <Setter Property="Height" Value="{DynamicResource FieldHeight}" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+
+        <!-- The "..." button next to a path field. -->
+        <Style Selector="Button.browse">
+            <Setter Property="Height" Value="{DynamicResource FieldHeight}" />
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Margin" Value="8,0,0,0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="ToolTip.Tip" Value="Durchsuchen" />
+        </Style>
+
+        <Style Selector="Button.action">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="MinWidth" Value="150" />
+        </Style>
+
+        <Style Selector="Button.secondary">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="MinWidth" Value="110" />
+        </Style>
+
+        <!-- Tabs read as navigation, not as a boxed container. -->
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="14,8" />
+            <Setter Property="MinHeight" Value="38" />
+        </Style>
+    </Application.Styles>
+</Application>

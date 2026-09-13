@@ -14,7 +14,7 @@ Costura.Fody, `Settings.Default` or `MessageBox` refers to the pre-port code.
 
 ```sh
 dotnet build kopator.slnx          # all three projects
-dotnet test                        # 57 tests, Kopator.Core.Tests
+dotnet test                        # 58 tests, Kopator.Core.Tests
 dotnet run --project src/Kopator.App
 dotnet test --filter-method '*CollectService*'     # single class
 dotnet test --filter-method '*DegenerateIgnore*'   # single test
@@ -110,6 +110,12 @@ and `win-x64` (both cross-published from Linux) and attach them to a GitHub rele
 tag containing `-` is released as a pre-release.
 
 CI needs `fetch-depth: 0` — MinVer reads tag history, and a shallow clone breaks it.
+
+The release step tolerates a tag that already has a release, which is what happens when
+one is created through the GitHub UI: creating it pushes the tag, the push triggers this
+workflow, and the release is therefore already there by the time the job runs. In that
+case the binaries are uploaded to the existing release and its title, notes and
+pre-release flag are left as the author set them.
 
 ## Conventions
 
